@@ -52,9 +52,14 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
 
     async function fetchSearchResults() {
       if (deferredInput.length > 0) {
-        /* const data = await getSearchResults(deferredInput); */
-        const data = fuse.search(deferredInput);
-        const items = data.map((result) => result.item);
+        // const data = fuse.search(deferredInput);
+        // const items = data.map((result) => result.item);
+        let items = [];
+        for(let i = 0; i < allTracks.length; i++){
+          if((allTracks[i]?.payload.trackTitle.toLowerCase().includes(deferredInput.toLowerCase())) || (allTracks[i]?.payload.problemTitle.toLowerCase().includes(deferredInput.toLowerCase()))){
+            items.push(allTracks[i]);
+          }
+        }
         setSearchTracks(items);
       } else {
         setSearchTracks([]);
@@ -137,7 +142,9 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
             placeholder="Search"
             className="border-none focus-visible:outline-none focus-visible:ring-0 text-base shadow-none"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
           />
           <DialogClose>
             <Cross2Icon className="h-4 w-4" />
